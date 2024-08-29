@@ -67,7 +67,7 @@ int main()
                     psi_in[c_count][ang_count]=psi_out[c_count-1][ang_count];
                     psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0])/(sigma_t*del_x+2*angl[ang_count][0]));
                     psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
                 scaler_flux[c_count]=scaler_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
             }
@@ -85,14 +85,14 @@ int main()
                     psi_in[c_count][ang_count]=0;
                     psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0])/(sigma_t*del_x+2*angl[ang_count][0]));
                     psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
                 else
                 {
                     psi_in[c_count][ang_count]=psi_out[c_count+1][ang_count];
                     psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0])/(sigma_t*del_x+2*angl[ang_count][0]));
                     psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
                 scaler_flux[c_count]=scaler_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
             }
