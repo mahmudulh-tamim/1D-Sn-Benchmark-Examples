@@ -41,11 +41,11 @@ int main()
     };
 
 
-    double psi_avg[tot_cell][tot_quad_point],psi_in[tot_cell][tot_quad_point],psi_out[tot_cell][tot_quad_point],scaler_flux[tot_cell];
+    double psi_avg[tot_cell][tot_quad_point],psi_in[tot_cell][tot_quad_point],psi_out[tot_cell][tot_quad_point],scalar_flux[tot_cell];
 
     for (int i=0;i<tot_cell;i++)
     {
-        scaler_flux[i]=0;
+        scalar_flux[i]=0;
     }
 
     int c_count, ang_count;
@@ -69,7 +69,7 @@ int main()
                     psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
                     std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
-                scaler_flux[c_count]=scaler_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
+                scalar_flux[c_count]=scalar_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
             }
 
     }
@@ -94,19 +94,19 @@ int main()
                     psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
                     std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
-                scaler_flux[c_count]=scaler_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
+                scalar_flux[c_count]=scalar_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
             }
 
 
     }
-    std::ofstream write_output_scaler_flux("Output_scaler_flux.txt");
-    assert(write_output_scaler_flux.is_open());
+    std::ofstream write_output_scalar_flux("Output_scalar_flux.txt");
+    assert(write_output_scalar_flux.is_open());
     for (int j=0;j<tot_cell;j++)
         {
-            write_output_scaler_flux<<scaler_flux[j]<<"\n";
+            write_output_scalar_flux<<scalar_flux[j]<<"\n";
         }
 
-    write_output_scaler_flux.close();
+    write_output_scalar_flux.close();
 
 
     return 0;
