@@ -8,14 +8,16 @@
 int main()
 {
     /*data */
-    double q_ext,sigma_t,X,q,del_x;
+    double q_ext,sigma_t,X,q,del_x,psi_left,psi_right;
 
     q_ext=3;
     //therefore
-    q=3/2;
+    q=q_ext/2;
     sigma_t=1;
     //problem domain
     X=1;
+    psi_left=0;
+    psi_right=0;
 
 
     const int tot_cell=20, tot_quad_point=16;
@@ -50,52 +52,47 @@ int main()
 
     int c_count, ang_count;
 
-    //forward sweep
-    for (ang_count=tot_quad_point-1;ang_count>=(tot_quad_point/2);ang_count--)
+
+    for (ang_count=tot_quad_point-1;ang_count>=0;ang_count--)
     {
-        for (c_count=0;c_count<tot_cell;c_count++)
-            {
-                if(c_count==0)
-                {
-                    psi_in[0][ang_count]=0;
-                    psi_out[0][ang_count]=(2*q*del_x-psi_in[0][ang_count]*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
-                    psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+        if (fabs(angl[ang_count][0])>0) {
+            //forward sweep
+            angl[ang_count][0]=fabs(angl[ang_count][0]);
+            for (c_count=0;c_count<tot_cell;c_count++) {
+                if(c_count==0) {
+                    psi_in[c_count][ang_count]=psi_left;
+
                 }
-                else
-                {
+                else {
                     psi_in[c_count][ang_count]=psi_out[c_count-1][ang_count];
-                    psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
-                    psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
+
+                psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
+                psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
+                std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+
                 scalar_flux[c_count]=scalar_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
             }
-
-    }
-
-    //backward sweep
-    for (ang_count=0;ang_count<(tot_quad_point/2);ang_count++)
-    {
-        angl[ang_count][0]=fabs(angl[ang_count][0]);
-        for (c_count=tot_cell-1;c_count>=0;c_count--)
-            {
-                if(c_count==tot_cell-1)
-                {
-                    psi_in[c_count][ang_count]=0;
-                    psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
-                    psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+        }
+        else {
+            //backward sweep
+            angl[ang_count][0]=fabs(angl[ang_count][0]);
+            for (c_count=tot_cell-1;c_count>=0;c_count--){
+                if(c_count==tot_cell-1){
+                    psi_in[c_count][ang_count]=psi_right;
                 }
-                else
-                {
+                else{
                     psi_in[c_count][ang_count]=psi_out[c_count+1][ang_count];
-                    psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
-                    psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
-                    std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
                 }
+
+
+                psi_out[c_count][ang_count]=(2*q*del_x-psi_in[c_count][ang_count]*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
+                psi_avg[c_count][ang_count]=(psi_in[c_count][ang_count]+psi_out[c_count][ang_count])/2;
+                std::cout<<"Cell:"<<c_count<<"\n"<<"Angle:"<<ang_count<<"\n"<<psi_in[c_count][ang_count]<<"\n"<<psi_out[c_count][ang_count]<<"\n"<<psi_avg[c_count][ang_count]<<"\n";
+
                 scalar_flux[c_count]=scalar_flux[c_count]+psi_avg[c_count][ang_count]*angl[ang_count][1];
             }
+        }
 
 
     }
