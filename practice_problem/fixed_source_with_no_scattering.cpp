@@ -21,7 +21,7 @@ int main()
 
 
     const int tot_cell=20, tot_quad_point=16;
-    del_x=X/20;
+    del_x=X/tot_cell;
 
     double angl[tot_quad_point][2]={
         {-0.9894009349916499, 0.0271524594117541},
@@ -55,7 +55,7 @@ int main()
 
     for (ang_count=tot_quad_point-1;ang_count>=0;ang_count--)
     {
-        if (fabs(angl[ang_count][0])>0) {
+        if (angl[ang_count][0]>0) {
             //forward sweep
             angl[ang_count][0]=fabs(angl[ang_count][0]);
             for (c_count=0;c_count<tot_cell;c_count++) {
