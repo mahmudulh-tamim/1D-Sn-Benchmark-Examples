@@ -21,8 +21,8 @@ int main() {
     sigma_s=log(a_number_for_which_I_have_to_calculate_e_base_log);
     //problem domain
     X=1;
-    psi_left=0;
-    psi_right=0;
+    psi_left=0;//0.5*(q_s)/(sigma_t-sigma_s);
+    psi_right=0;//0.5*(q_s)/(sigma_t-sigma_s);
 
 
     const int tot_cell=20, tot_quad_point=16;
@@ -72,7 +72,7 @@ int main() {
         {
             if (angl[ang_count][0]>0) {
                 //forward sweep
-                angl[ang_count][0]=fabs(angl[ang_count][0]);
+
                 for (c_count=0;c_count<tot_cell;c_count++) {
                     if(c_count==0) {
                         psi_in=psi_left;
@@ -89,17 +89,14 @@ int main() {
             }
             else {
                 //backward sweep
-                angl[ang_count][0]=fabs(angl[ang_count][0]);
                 for (c_count=tot_cell-1;c_count>=0;c_count--){
                     if(c_count==tot_cell-1){
                         psi_in=psi_right;
                     }
-                    else{
+                    else {
                         psi_in=psi_out;
                     }
-
-
-                    psi_out=(2*q[c_count]*del_x-psi_in*(sigma_t*del_x-2*angl[ang_count][0]))/(sigma_t*del_x+2*angl[ang_count][0]);
+                    psi_out=(2*q[c_count]*del_x-psi_in*(sigma_t*del_x-2*fabs(angl[ang_count][0])))/(sigma_t*del_x+2*fabs(angl[ang_count][0]));
                     psi_avg=(psi_in+psi_out)/2;
                     scalar_flux[c_count]=scalar_flux[c_count]+psi_avg*angl[ang_count][1];
                 }
@@ -111,7 +108,10 @@ int main() {
         square_diff_2=0;
         for (int i=0;i<tot_cell;i++) {
             square_diff_2=square_diff_2+(scalar_flux[i]-scalar_flux_temp[i])*(scalar_flux[i]-scalar_flux_temp[i]);
+            cout<<scalar_flux[i]<<" "<<scalar_flux_temp[i]<<endl;
         }
+        cout<<"new iteration"<<endl;
+
         diff_2=sqrt(square_diff_2);
         itr_count+=1;
     }
